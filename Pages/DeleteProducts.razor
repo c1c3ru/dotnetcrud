@@ -1,0 +1,16 @@
+@page "/products/{id:int}/delete"
+@using crud.Models
+@using crud.Services
+@inject IProductService ProductService
+@inject NavigationManager NavigationManager
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ProductService.DeleteProductAsync(Id);
+        NavigationManager.NavigateTo("/Products");
+    }
+}

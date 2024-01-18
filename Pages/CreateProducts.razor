@@ -1,0 +1,27 @@
+@page "/products/create"
+@using crud.Models
+@using crud.Services
+@inject IProductService ProductService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create Product</PageTitle>
+
+<h1>Create Product</h1>
+
+<form @onsubmit="OnSubmit">
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" bind="@Product.Name" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+@code {
+    private Product Product { get; set; } = new Product();
+
+    private async Task OnSubmit()
+    {
+        await ProductService.CreateProductAsync(Product);
+        NavigationManager.NavigateTo("/Products");
+    }
+}

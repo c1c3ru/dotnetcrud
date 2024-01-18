@@ -1,0 +1,42 @@
+@page "/products/{id:int}"
+@using crud.Models
+@using crud.Services
+@inject IProductService ProductService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit Product</PageTitle>
+
+<h1>Edit Product</h1>
+
+@if (Product != null)
+{
+    <form @onsubmit="OnSubmit">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" bind="@Product.Name" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Product Product { get; set; } = new Product();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Product = await ProductService.GetProductByIdAsync(Id) ?? new Product(); // Ajusta para considerar o caso de retorno nulo
+    }
+
+    private async Task OnSubmit()
+    {
+        await ProductService.UpdateProductAsync(Product);
+        NavigationManager.NavigateTo("/Products");
+    }
+}

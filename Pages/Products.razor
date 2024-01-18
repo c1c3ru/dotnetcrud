@@ -1,0 +1,29 @@
+@page "/products"
+@using crud.Models
+@using crud.Services
+@inject IProductService ProductService
+
+<h3>Products List</h3>
+
+@if (_products != null)
+{
+    <ul>
+        @foreach (var product in _products)
+        {
+            <li>@product.Name</li>
+        }
+    </ul>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+    private List<Product> _products = new List<Product>(); // Inicializa a lista para evitar o aviso
+
+    protected override async Task OnInitializedAsync()
+    {
+        _products = (List<Product>)((await ProductService.GetProductsAsync()) ?? new List<Product>()); // Ajusta para considerar o caso de retorno nulo
+    }
+}
